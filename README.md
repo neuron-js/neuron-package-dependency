@@ -22,10 +22,15 @@ neuron-package-dependency [--cwd <path>] --output <filename>
 ## Developer's draft
 
 path -> 第一层 dir
+
 -> package.json(neuron-package-json)
+
 -> name, entries(relative to package dir), main(), dependencies(require), asyncDependencies(async)
+
 -> commonjs-walker
-  -> b -> depdendencies[b] || '*'
+
+-> b -> depdendencies[b] || '*'
+
 -> (require, async)foreign
 
 ```js
