@@ -24,5 +24,10 @@
   "devDependencies": {
     "mocha": "*",
     "chai": "*"
+  },
+  "dependencies": {
+    "async": "^1.4.2",
+    "commonjs-walker": "^6.0.2",
+    "path": "^0.12.7"
   }
 }
