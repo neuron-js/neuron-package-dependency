@@ -52,30 +52,36 @@ function _walkPackage(packageJSON, done) {
 
   async.map(walkPathes, walker.walk, function(err, results) {
     if(err) {throw err;}
-    var modDeps = {};
-    walkPathes.forEach(function(walkPath) {
-      var dependencies = findForeignDeps(results[walkPath].require || {});
-      var asyncDependencies = findForeignDeps(results[walkPath].async || {});
-
-      if(dependencies) {
-        dependencies.forEach(function(dep) {
-          modDeps.dependencies[dep] = packageJSON.dependencies[dep] || '*';
-        });
-      }
-
-      if(asyncDependencies) {
-        asyncDependencies.forEach(function(dep) {
-          modDeps.asyncDependencies[dep] = packageJSON.asyncDependencies[dep] || '*';
-        });
-      }
-
-    });
-    mod.dependencies['*'] = modDeps;
+    mod.dependencies['*'] = _solveDependencies(walkPathes, results, packageJSON.dependencies || {}, packageJSON.asyncDependencies || {});
     done(null, mod);
   });
 }
 
-function findForeignDeps(deps) {
+function _solveDependencies(walkPathes, walkResults, packageDependencies, packageAsyncDependencies) {
+  var modDeps = {};
+  walkPathes.forEach(function(walkPath, index) {
+    var walkResult = walkResults[index];
+    var dependencies = _findForeignDeps(walkResult[walkPath].require || {});
+    var asyncDependencies = _findForeignDeps(walkResult[walkPath].async || {});
+
+    if(dependencies) {
+      dependencies.forEach(function(dep) {
+        modDeps.dependencies[dep] = packageDependencies[dep] || '*';
+      });
+    }
+
+    if(asyncDependencies) {
+      asyncDependencies.forEach(function(dep) {
+        modDeps.asyncDependencies[dep] = packageAsyncDependencies[dep] || '*';
+      });
+    }
+  });
+  return modDeps;
+}
+
+
+
+function _findForeignDeps(deps) {
   var foreignDeps = [];
   for(var dep in deps) {
     if(deps.hasOwnProperty(dep)) {
@@ -101,4 +107,4 @@ function getDirectories() {
 
 module.exports.getDirectories = getDirectories;
 module.exports.listFiles = listFiles;
-module.exports.walkPackages = walkPackages;
+module.exports._solveDependencies = _solveDependencies;

@@ -1,1 +1,2 @@
-require.async('./lib/c');
+require.async('f');
+require('./d');

@@ -1,2 +1,2 @@
-require('./lib/c.js');
+require('./lib/c');
 require('e');
