@@ -2,9 +2,11 @@
   "name": "neuron-package-dependency",
   "version": "1.0.0",
   "description": "neuron-package-dependency",
-  "main": "index.js",
+  "bin": {
+    "neuron-package-dependency": "./bin/package-dependency.js"
+  },
   "scripts": {
-    "test": "./node_modules/.bin/mocha --reporter spec ./test/*.js"
+    "test": "NODE_ENV=test ./node_modules/.bin/mocha --reporter spec ./test/*.js"
   },
   "repository": {
     "type": "git",
@@ -27,7 +29,12 @@
   },
   "dependencies": {
     "async": "^1.4.2",
-    "commonjs-walker": "^6.0.2",
-    "path": "^0.12.7"
+    "commander": "^2.9.0",
+    "commonjs-walker": "^6.0.3",
+    "fs-extra": "^0.24.0",
+    "glob": "^5.0.15",
+    "neuron-json": "^1.0.2",
+    "path": "^0.12.7",
+    "underscore": "^1.8.3"
   }
 }
