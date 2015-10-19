@@ -1,6 +1,7 @@
 #! /usr/bin/env node
 
 var commander = require('commander');
+var path = require('path');
 
 var cwdVal, outputVal;
 commander
@@ -15,7 +16,11 @@ if(!commander.output) {
 }
 
 if(!commander.cwd) {
-  commander.cwd = '/';
+  commander.cwd = process.cwd();
+}
+
+if(!path.isAbsolute(commander.cwd)) {
+  commander.cwd = path.join(process.cwd(), commander.cwd);
 }
 
 var neuron_package_dependency = require('../index.js');
