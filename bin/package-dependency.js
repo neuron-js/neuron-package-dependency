@@ -2,6 +2,8 @@
 
 var commander = require('commander');
 var path = require('path');
+var writeOutput = require('../lib/writeOutput');
+
 
 var cwdVal, outputVal;
 commander
@@ -25,4 +27,11 @@ if(!path.isAbsolute(commander.cwd)) {
 
 var neuron_package_dependency = require('../index.js');
 
-neuron_package_dependency(commander.cwd, commander.output);
+neuron_package_dependency(commander.cwd, function(err, dependencyTree) {
+  writeOutput(commander.output, JSON.stringify(dependencyTree), function(err) {
+    if(err) {
+      console.log(err);
+    }
+    console.log('All packages\' dependencies resolved.\nPlease check ' + commander.output + ' for details.');
+  });
+});

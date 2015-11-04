@@ -7,23 +7,19 @@ var readNeuronJSONs = require('./lib/readNeuronJsons');
 var resolvePackageDependencies = require('./lib/resolvePackageDependencies');
 var writeOutput = require('./lib/writeOutput');
 
-function neuronPackageDependency(cwd, output) {
+function neuronPackageDependency(cwd, done) {
   async.waterfall([
     function(done) {
       done(null, cwd);
     },
     filterDirectories,
     readNeuronJSONs,
-    resolvePackageDependencies,
-    function(dependencyTrees, done) {
-      done(null, output, JSON.stringify(dependencyTrees));
-    },
-    writeOutput
-  ], function(err) {
+    resolvePackageDependencies
+  ], function(err, dependencyTree) {
       if(err) {
-        throw err;
+        done(err);
       }
-      console.log('All packages\' dependencies resolved.\nPlease check ' + output + ' for details.');
+      done(null, dependencyTree);
     });
 }
 
