@@ -1,1 +1,1 @@
-{"mod_a":{"*":{"dependencies":{"e@*":"*","m@*":"*"},"asyncDependencies":{}}},"e":{"*":{}},"m":{"*":{}},"mod_b":{"*":{"dependencies":{},"asyncDependencies":{}}},"_version":1446619261525}
+{"mod_a":{"*":{"dependencies":{"e@*":"*","m@*":"*"},"asyncDependencies":{}}},"e":{"*":{}},"m":{"*":{}},"mod_b":{"*":{"dependencies":{},"asyncDependencies":{}}},"_version":1446641983937}
