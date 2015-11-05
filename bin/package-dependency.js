@@ -28,9 +28,13 @@ if(!path.isAbsolute(commander.cwd)) {
 var neuron_package_dependency = require('../index.js');
 
 neuron_package_dependency(commander.cwd, function(err, dependencyTree) {
+  if(err) {
+    return console.warn(err);
+  };
+
   writeOutput(commander.output, JSON.stringify(dependencyTree), function(err) {
     if(err) {
-      console.log(err);
+      return console.warn(err);
     }
     console.log('All packages\' dependencies resolved.\nPlease check ' + commander.output + ' for details.');
   });

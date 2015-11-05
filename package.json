@@ -28,12 +28,13 @@
     "chai": "*"
   },
   "dependencies": {
-    "async": "^1.4.2",
+    "async": "^1.5.0",
+    "chai": "^3.4.0",
     "commander": "^2.9.0",
-    "commonjs-walker": "^6.0.3",
+    "commonjs-walker": "^7.0.0",
     "fs-extra": "^0.24.0",
     "glob": "^5.0.15",
-    "neuron-json": "^1.0.2",
+    "neuron-json": "^1.0.3",
     "underscore": "^1.8.3"
   }
 }
