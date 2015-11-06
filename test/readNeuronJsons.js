@@ -13,6 +13,7 @@ describe("read a package", function() {
       main: './index.js',
       entries: [],
       css: [],
+      version: '*',
       'packageRoot': (__dirname + '/fixtures/mod_a/')
     }];
     function test(err, result) {
@@ -30,9 +31,10 @@ describe("read a empty directory", function() {
     var dirs = glob.sync(__dirname + '/fixtures/mod_b/');
     var expectResult = [{
       name: 'mod_b',
-      main: false,
+      main: './index.js',
       entries: [],
       css: [],
+      version: '*',
       packageRoot: __dirname + '/fixtures/mod_b/'
     }];
     function test(err, result) {
@@ -53,13 +55,15 @@ describe("read a multiple packages", function() {
         main: './index.js',
         entries: [],
         css: [],
+        version: '*',
         'packageRoot': (__dirname + '/fixtures/mod_a/')
       },
       {
         name: 'mod_b',
-        main: false,
+        main: './index.js',
         entries: [],
         css: [],
+        version: '*',
         packageRoot: __dirname + '/fixtures/mod_b/'
       }
     ];

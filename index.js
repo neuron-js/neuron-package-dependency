@@ -5,7 +5,6 @@ var async = require('async');
 var filterDirectories = require('./lib/filterDirectories');
 var readNeuronJSONs = require('./lib/readNeuronJsons');
 var resolvePackageDependencies = require('./lib/resolvePackageDependencies');
-var writeOutput = require('./lib/writeOutput');
 
 function neuronPackageDependency(cwd, done) {
   async.waterfall([

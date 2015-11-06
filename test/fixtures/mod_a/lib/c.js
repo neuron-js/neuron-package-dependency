@@ -1,2 +1,2 @@
 var a = 'test';
-require('../f');
+require('../f.js');

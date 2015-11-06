@@ -15,6 +15,27 @@ var neuronJsons = [{
   'packageRoot': __dirname + '/fixtures/mod_a/'
 }];
 
-resolvePackageDependencies(neuronJsons, function(err, results) {
-  console.log(JSON.stringify(results));
+describe("resolve dependencies", function() {
+  it("returns an object of dependencyTree as expectResult", function(done){
+    var expectResult = {
+      'mod_a': {
+        '*': {
+          'dependencies': {
+            'e@*': '*',
+            'm@*': '*',
+            'z@*': '*'
+          },
+          'asyncDependencies': {
+            'f@*': '*'
+          }
+        }
+      }
+    };
+
+    function test(err, result) {
+      expect(result).to.deep.equals(expectResult);
+      done();
+    }
+    resolvePackageDependencies(neuronJsons, test);
+  });
 });
