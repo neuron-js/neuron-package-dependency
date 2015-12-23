@@ -1,4 +1,4 @@
-#! /usr/bin/env node
+#!/usr/bin/env node
 
 var commander = require('commander');
 var path = require('path');
@@ -13,7 +13,7 @@ commander
   .parse(process.argv);
 
 if(!commander.output) {
-  console.warn("Parameter \'--output\' is required.");
+  console.warn('Parameter "--output" is required.');
   process.exit(1);
 }
 
@@ -27,14 +27,21 @@ if(!path.isAbsolute(commander.cwd)) {
 
 var neuron_package_dependency = require('../index.js');
 
+function fatal (err) {
+  console.error('')
+  console.error(err.message || err)
+  console.error('')
+  process.exit(1)
+}
+
 neuron_package_dependency(commander.cwd, function(err, dependencyTree) {
   if(err) {
-    return console.warn(err);
-  };
+    return fatal(err);
+  }
 
   writeOutput(commander.output, JSON.stringify(dependencyTree), function(err) {
     if(err) {
-      return console.warn(err);
+      return fatal(err);
     }
     console.log('All packages\' dependencies resolved.\nPlease check ' + commander.output + ' for details.');
   });
