@@ -7,10 +7,10 @@ var writeOutput = require('../lib/writeOutput');
 
 var cwdVal, outputVal;
 commander
-  .version('1.0.0')
+  .version('1.1.2')
   .option('--cwd [path]', 'Set working directory')
   .option('--output <filename>', 'Set output filename')
-  .option('--allow-empty', 'Allow empty directory')
+  .option('--allowEmpty', 'Allow package without entries')
   .parse(process.argv);
 
 if(!commander.output) {
@@ -35,7 +35,11 @@ function fatal (err) {
   process.exit(1)
 }
 
-neuron_package_dependency(commander.cwd, function(err, dependencyTree) {
+var options = {
+  allowEmpty: commander.allowEmpty
+};
+
+neuron_package_dependency(commander.cwd, options, function(err, dependencyTree) {
   if(err) {
     return fatal(err);
   }

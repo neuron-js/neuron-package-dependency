@@ -6,6 +6,8 @@ var resolvePackageDependencies = require('../lib/resolvePackageDependencies');
 
 var glob = require('glob');
 
+var options = {};
+
 var neuronJsons = [{
   name: 'mod_a',
   main: '',
@@ -34,6 +36,6 @@ describe("resolve dependencies", function() {
       expect(result).to.deep.equals(expectResult);
       done();
     }
-    resolvePackageDependencies(neuronJsons, test);
+    resolvePackageDependencies(neuronJsons, options, test);
   });
 });

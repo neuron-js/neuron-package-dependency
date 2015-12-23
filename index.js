@@ -6,10 +6,10 @@ var filterDirectories = require('./lib/filterDirectories');
 var readNeuronJSONs = require('./lib/readNeuronJsons');
 var resolvePackageDependencies = require('./lib/resolvePackageDependencies');
 
-function neuronPackageDependency(cwd, done) {
+function neuronPackageDependency(cwd, options, done) {
   async.waterfall([
     function(done) {
-      done(null, cwd);
+      done(null, cwd, options);
     },
     filterDirectories,
     readNeuronJSONs,
