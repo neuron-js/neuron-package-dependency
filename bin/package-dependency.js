@@ -10,6 +10,7 @@ commander
   .version('1.0.0')
   .option('--cwd [path]', 'Set working directory')
   .option('--output <filename>', 'Set output filename')
+  .option('--allow-empty', 'Allow empty directory')
   .parse(process.argv);
 
 if(!commander.output) {
