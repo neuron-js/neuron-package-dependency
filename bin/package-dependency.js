@@ -3,11 +3,12 @@
 var commander = require('commander');
 var path = require('path');
 var writeOutput = require('../lib/writeOutput');
+var neuron_config = require('neuron-project-config');
 
 
 var cwdVal, outputVal;
 commander
-  .version('1.1.2')
+  .version(require('../package.json').version)
   .option('--cwd [path]', 'Set working directory')
   .option('--output <filename>', 'Set output filename')
   .option('--allowEmpty', 'Allow package without entries')
@@ -39,15 +40,31 @@ var options = {
   allowEmpty: commander.allowEmpty
 };
 
-neuron_package_dependency(commander.cwd, options, function(err, dependencyTree) {
-  if(err) {
-    return fatal(err);
+
+neuron_config.read(commander.cwd, function (err, config) {
+  if (err) {
+    return fatal(err.message || err)
   }
 
-  writeOutput(commander.output, JSON.stringify(dependencyTree), function(err) {
-    if(err) {
-      return fatal(err);
+  options.compilers = config.compilers || []
+  var cwd = config.src
+
+  neuron_package_dependency(
+    cwd,
+    options,
+    function(err, dependencyTree) {
+      if(err) {
+        return fatal(err);
+      }
+
+      writeOutput(commander.output, JSON.stringify(dependencyTree), function(err) {
+        if(err) {
+          return fatal(err);
+        }
+        console.log('All packages\' dependencies resolved.\nPlease check ' + commander.output + ' for details.');
+      });
     }
-    console.log('All packages\' dependencies resolved.\nPlease check ' + commander.output + ' for details.');
-  });
-});
+  );
+})
+
+
