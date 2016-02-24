@@ -12,14 +12,7 @@ commander
   .option('--cwd [path]', 'Set working directory')
   .option('--output <filename>', 'Set output filename')
   .option('--allowEmpty', 'Allow package without entries')
-  .option('-v', 'Show version')
   .parse(process.argv);
-
-
-if (!commander.v) {
-  console.log(require('../package.json').version)
-  process.exit(0)
-}
 
 
 if(!commander.output) {
