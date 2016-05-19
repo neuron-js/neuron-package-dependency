@@ -12,6 +12,7 @@ commander
   .option('--cwd [path]', 'Set working directory')
   .option('--output <filename>', 'Set output filename')
   .option('--allowEmpty', 'Allow package without entries')
+  .option('--compress', 'Whether should compress output json')
   .parse(process.argv);
 
 
@@ -58,12 +59,18 @@ neuron_config.read(commander.cwd, function (err, config) {
         return fatal(err);
       }
 
-      writeOutput(commander.output, JSON.stringify(dependencyTree), function(err) {
-        if(err) {
-          return fatal(err);
+      writeOutput(
+        commander.output,
+        commander.compress
+          ? JSON.stringify(dependencyTree)
+          : JSON.stringify(dependencyTree, null, 2),
+        function(err) {
+          if(err) {
+            return fatal(err);
+          }
+          console.log('All packages\' dependencies resolved.\nPlease check ' + commander.output + ' for details.');
         }
-        console.log('All packages\' dependencies resolved.\nPlease check ' + commander.output + ' for details.');
-      });
+      );
     }
   );
 })
