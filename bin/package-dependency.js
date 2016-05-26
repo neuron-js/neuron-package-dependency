@@ -1,35 +1,32 @@
 #!/usr/bin/env node
 
-var commander = require('commander');
-var path = require('path');
-var writeOutput = require('../lib/writeOutput');
-var neuron_config = require('neuron-project-config');
+let commander = require('commander')
+const node_path = require('path')
+const neuron_config = require('neuron-project-config')
+const expand = require('fs-expand')
+const package_dependency = require('..')
+const fse = require('fs-extra')
 
 
-var cwdVal, outputVal;
 commander
   .version(require('../package.json').version)
   .option('--cwd [path]', 'Set working directory')
   .option('--output <filename>', 'Set output filename')
-  .option('--allowEmpty', 'Allow package without entries')
+  .option('--allow-empty', 'Allow package without entries')
   .option('--compress', 'Whether should compress output json')
-  .parse(process.argv);
+  .parse(process.argv)
 
 
 if(!commander.output) {
-  console.warn('Parameter "--output" is required.');
-  process.exit(1);
+  console.error('Parameter "--output" is required.');
+  process.exit(1)
 }
 
-if(!commander.cwd) {
-  commander.cwd = process.cwd();
-}
 
-if(!path.isAbsolute(commander.cwd)) {
-  commander.cwd = path.join(process.cwd(), commander.cwd);
-}
+let cwd = node_path.resolve(commander.cwd || process.cwd())
+let output = node_path.resolve(cwd, commander.output)
+let compress = commander.compress
 
-var neuron_package_dependency = require('../index.js');
 
 function fatal (err) {
   console.error('')
@@ -40,39 +37,53 @@ function fatal (err) {
 
 var options = {
   allowEmpty: commander.allowEmpty
-};
+}
 
 
-neuron_config.read(commander.cwd, function (err, config) {
+neuron_config.read(cwd, function (err, config) {
   if (err) {
     return fatal(err.message || err)
   }
 
-  options.compilers = config.compilers || []
+  options.compilers = config.compilers
   var cwd = config.src
 
-  neuron_package_dependency(
-    cwd,
-    options,
-    function(err, dependencyTree) {
-      if(err) {
-        return fatal(err);
+  get_names(cwd, (err, names) => {
+    if (err) {
+      return fatal(err)
+    }
+
+    let dirs = names.map(name => node_path.join(cwd, name))
+    package_dependency(dirs, options, (err, dependencies) => {
+      if (err) {
+        return fatal(err)
       }
 
-      writeOutput(
-        commander.output,
-        commander.compress
-          ? JSON.stringify(dependencyTree)
-          : JSON.stringify(dependencyTree, null, 2),
-        function(err) {
-          if(err) {
-            return fatal(err);
-          }
-          console.log('All packages\' dependencies resolved.\nPlease check ' + commander.output + ' for details.');
-        }
-      );
-    }
-  );
+      write(dependencies)
+    })
+  })
 })
 
+
+function write (dependencies) {
+  fse.outputFile(
+    output,
+    compress
+      ? JSON.stringify(dependencies)
+      : JSON.stringify(dependencies, null, 2),
+    (err) => {
+      if (err) {
+        return fatal(err)
+      }
+    }
+  )
+}
+
+
+function get_names (dir, callback) {
+  expand('*', {
+    cwd: dir,
+    filter: 'isDirectory'
+  }, callback)
+}
 
