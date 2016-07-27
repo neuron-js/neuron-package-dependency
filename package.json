@@ -1,6 +1,6 @@
 {
   "name": "neuron-package-dependency",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "neuron-package-dependency",
   "bin": {
     "neuron-package-dependency": "./bin/package-dependency.js"
@@ -34,7 +34,7 @@
     "async": "^1.5.0",
     "chai": "^3.4.0",
     "commander": "^2.9.0",
-    "commonjs-walker": "^8.0.0",
+    "module-walker": "2.1.1",
     "fs-expand": "^1.1.2",
     "fs-extra": "^0.30.0",
     "minimist": "^1.2.0",

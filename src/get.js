@@ -4,7 +4,7 @@ module.exports = get
 
 const node_path = require('path')
 const async = require('async')
-const commonjs_walker = require('commonjs-walker')
+const module_walker = require('module-walker')
 const read = require('./read-json')
 const _ = require('underscore')
 
@@ -14,14 +14,25 @@ const TYPES = [
   'async'
 ]
 
-
 function get (dir, options, callback) {
   read(dir, options, (err, pkg) => {
     if (err) {
       return callback(err)
     }
 
-    let walker = commonjs_walker()
+    let walker = module_walker({
+      allowCyclic: true,
+      checkRequireLength: true,
+      allowAbsoluteDependency: false,
+      extensions: ['.js', '.json'],
+      requireResolve: true,
+      requireAsync: true,
+      commentRequire: true,
+      allowNonLiteralRequire: false,
+      allowImportExportEverywhere: true,
+      allowReturnOutsideFunction: true,
+      sourceType: 'module'
+    })
 
     if (options.compilers) {
       walker.register(options.compilers)
@@ -34,11 +45,7 @@ function get (dir, options, callback) {
 
     entries = entries.map((entry) => node_path.join(dir, entry))
 
-    walker.walk(entries).done((err, nodes) => {
-      if (err) {
-        return callback(err)
-      }
-
+    walker.walk(entries).then((nodes) => {
       let dependencies = {}
 
       each_node(nodes, (name, type) => {
@@ -55,7 +62,8 @@ function get (dir, options, callback) {
         nodes: nodes,
         dependencies: dependencies
       })
-    })
+
+    }, callback)
   })
 }
 
