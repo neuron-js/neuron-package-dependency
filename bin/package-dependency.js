@@ -46,6 +46,14 @@ neuron_config.read(cwd, function (err, config) {
   }
 
   options.compilers = config.compilers
+  options.parseAST = config.parseAST
+
+  if (!options.parseAST) {
+    throw new Error(
+      'parseAST(code, filename):AST should be defined in neuron.config.js,\n'
+      + 'or you should use neuron-package-dependency@3.x')
+  }
+
   var cwd = config.src
 
   get_names(cwd, (err, names) => {

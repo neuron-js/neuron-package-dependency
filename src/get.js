@@ -29,9 +29,7 @@ function get (dir, options, callback) {
       requireAsync: true,
       commentRequire: true,
       allowNonLiteralRequire: true,
-      allowImportExportEverywhere: true,
-      allowReturnOutsideFunction: true,
-      sourceType: 'module'
+      parse: options.parseAST
     })
 
     if (options.compilers) {
